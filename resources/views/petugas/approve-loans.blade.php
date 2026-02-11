@@ -34,14 +34,6 @@
                 @endif
             </td>
             <td class="px-4 py-2">
-                @if($loan->status === 'pending')
-                    <button onclick="openApproveModal({{ $loan->id }}, '{{ $loan->nama_peminjam }}')" class="px-2 py-1 rounded font-semibold text-sm" style="background-color: #CDEDEA; color: #374151; cursor: pointer;">
-                        Setujui
-                    </button>
-                    <button onclick="openRejectModal({{ $loan->id }}, '{{ $loan->nama_peminjam }}')" class="px-2 py-1 rounded font-semibold text-sm" style="background-color: #e74c3c; color: white; cursor: pointer;">
-                        Tolak
-                    </button>
-                @else
                     <span class="px-2 py-1 rounded font-semibold text-sm mr-2" style="background-color: #CDEDEA; color: #374151;">
                         {{ $loan->status === 'approved' ? 'Sudah Disetujui' : 'Ditolak' }}
                     </span>
