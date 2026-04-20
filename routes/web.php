@@ -125,7 +125,7 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
         $loans = \App\Models\Loan::where('user_id', auth()->id())->get();
         return view('siswa.loans', compact('loans'));
     })->name('siswa.loans.index');
-    
+
     // SISWA - RIWAYAT PEMINJAMAN
     Route::get('/siswa/riwayat-peminjaman', function () {
         $historyLoans = \App\Models\Loan::where('user_id', auth()->id())
@@ -133,22 +133,37 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
             ->with('tool')
             ->orderBy('tanggal_kembali', 'desc')
             ->paginate(20);
-        
+
         $totalDendaBayar = \App\Models\Loan::where('user_id', auth()->id())
             ->where('status', 'returned')
             ->where('denda_status', 'lunas')
             ->sum('denda');
-        
+
         return view('siswa.riwayat-peminjaman', compact('historyLoans', 'totalDendaBayar'));
     })->name('siswa.riwayat-peminjaman');
 
     // SISWA - PEMBAYARAN DENDA
-    Route::get('/siswa/denda-payments', [DendaPaymentController::class, 'index'])->name('siswa.denda-payments.index');
-    Route::get('/siswa/denda-payments/create/{loan}', [DendaPaymentController::class, 'create'])->name('siswa.denda-payments.create');
-    Route::post('/siswa/denda-payments/pay-now', [DendaPaymentController::class, 'payNow'])->name('siswa.denda-payments.pay-now');
-    Route::post('/siswa/denda-payments/{loan}', [DendaPaymentController::class, 'store'])->name('siswa.denda-payments.store');
-    Route::get('/siswa/denda-payments/{dendaPayment}', [DendaPaymentController::class, 'show'])->name('siswa.denda-payments.show');
-    Route::get('/siswa/denda-payments/{dendaPayment}/cetak', [DendaPaymentController::class, 'cetakBuktiPembayaran'])->name('siswa.denda-payments.cetak');
+    Route::get('/siswa/denda-payments', [DendaPaymentController::class, 'index'])
+        ->name('siswa.denda-payments.index');
+
+    Route::get('/siswa/denda-payments/create/{loan}', [DendaPaymentController::class, 'create'])
+        ->name('siswa.denda-payments.create');
+
+    Route::post('/siswa/denda-payments/pay-now', [DendaPaymentController::class, 'payNow'])
+        ->name('siswa.denda-payments.pay-now');
+
+    Route::post('/siswa/denda-payments/{loan}', [DendaPaymentController::class, 'store'])
+        ->name('siswa.denda-payments.store');
+
+    // ✅ cetak HARUS di atas show + kasih constraint juga
+    Route::get('/siswa/denda-payments/{dendaPayment}/cetak', [DendaPaymentController::class, 'cetakBuktiPembayaran'])
+        ->whereNumber('dendaPayment')
+        ->name('siswa.denda-payments.cetak');
+
+    // ✅ show paling bawah + constraint
+    Route::get('/siswa/denda-payments/{dendaPayment}', [DendaPaymentController::class, 'show'])
+        ->whereNumber('dendaPayment')
+        ->name('siswa.denda-payments.show');
 });
 
 /*
@@ -190,4 +205,4 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
 
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

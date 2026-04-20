@@ -89,9 +89,10 @@
                                 </td>
                                 <td class="px-6 py-4 text-sm">
                                     @if ($loan->denda > 0 && $loan->denda_status !== 'lunas')
-                                        <a href="{{ route('siswa.denda-payments.index') }}" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg transition">
-                                            💳 Bayar
-                                        </a>
+                                      <a href="{{ route('siswa.denda-payments.create', $loan->id) }}"
+   class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg">
+    💳 Bayar
+</a>
                                     @else
                                         <span class="px-3 py-2 bg-gray-300 text-gray-600 text-xs font-semibold rounded-lg">
                                             ✓ Selesai

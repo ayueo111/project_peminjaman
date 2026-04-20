@@ -9,18 +9,21 @@ class Tool extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'category_id',
-        'kode_alat',
-        'nama_alat',
-        'merk',
-        'lokasi',
-        'kondisi',
-        'jurusan',
-        'stok',
-        'tanggal',
-        'harga'
+   protected $fillable = [
+    'kode_alat',
+    'nama_alat',
+    'merk',
+    'lokasi',
+    'kondisi',
+    'kategori',
+    'jurusan',
+    'stok',
     ];
+
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
 
     protected $casts = [
         'tanggal' => 'datetime',
@@ -29,10 +32,5 @@ class Tool extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function loans()
-    {
-        return $this->hasMany(Loan::class);
     }
 }

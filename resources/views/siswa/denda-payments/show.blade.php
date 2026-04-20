@@ -107,27 +107,6 @@
             </div>
         @endif
 
-        <!-- Tombol Kembali -->
-        <div class="flex gap-3">
-            <a href="{{ route('siswa.denda-payments.index') }}" 
-               class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition text-center">
-                Kembali ke Daftar Pembayaran
-            </a>
-            @if ($dendaPayment->status === 'terverifikasi')
-                <a href="{{ route('siswa.denda-payments.cetak', $dendaPayment->id) }}" 
-                   target="_blank"
-                   class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition text-center">
-                    🖨️ Cetak Bukti Pembayaran
-                </a>
-            @endif
-            @if ($dendaPayment->status === 'ditolak')
-                <a href="{{ route('siswa.denda-payments.create', $dendaPayment->loan_id) }}" 
-                   class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-lg transition text-center">
-                    Ajukan Ulang Pembayaran
-                </a>
-            @endif
-        </div>
-
         <!-- Catatan Umum -->
         <div class="mt-6 bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
             <p class="text-sm text-blue-800">

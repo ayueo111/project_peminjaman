@@ -15,46 +15,68 @@
         <tr>
             <th class="px-4 py-2" style="color: #374151;">Kode</th>
             <th class="px-4 py-2" style="color: #374151;">Nama Alat</th>
-            <th class="px-4 py-2" style="color: #374151;">Merk</th>
-            <th class="px-4 py-2" style="color: #374151;">Lokasi</th>
-            <th class="px-4 py-2" style="color: #374151;">Kondisi</th>
             <th class="px-4 py-2" style="color: #374151;">Kategori</th>
-            <th class="px-4 py-2" style="color: #374151;">Jurusan</th>
-            <th class="px-4 py-2" style="color: #374151;">Stok</th>
+            <th class="px-4 py-2" style="color: #374151;">Total Alat</th>
+            <th class="px-4 py-2" style="color: #374151;">Alat yang dipinjam</th>
+            <th class="px-4 py-2" style="color: #374151;">Stok Tersedia</th>
+            <th class="px-4 py-2" style="color: #374151;">Status</th>
             <th class="px-4 py-2" style="color: #374151;">Aksi</th>
         </tr>
     </thead>
     <tbody>
-        @forelse ($tools as $tool)
-        <tr class="border-b text-center">
-            <td class="px-4 py-2">{{ $tool->kode_alat }}</td>
-            <td class="px-4 py-2">{{ $tool->nama_alat }}</td>
-            <td class="px-4 py-2">{{ $tool->merk }}</td>
-            <td class="px-4 py-2">{{ $tool->lokasi }}</td>
-            <td class="px-4 py-2">{{ $tool->kondisi }}</td>
-            <td class="px-4 py-2">{{ $tool->category->nama_kategori ?? '-' }}</td>
-            <td class="px-4 py-2">{{ $tool->jurusan }}</td>
-            <td class="px-4 py-2">
-                <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded font-semibold">
-                    {{ $tool->stok }}
-                </span>
-            </td>
-            <td class="px-4 py-2 space-x-2">
-                <a href="{{ route('tools.edit', $tool->id) }}" class="px-2 py-1 rounded font-semibold" style="background-color: #CDEDEA; color: #374151;">
-                    Edit
-                </a>
-                <button onclick="openDeleteModal({{ $tool->id }}, '{{ $tool->nama_alat }}')" class="px-2 py-1 rounded font-semibold" style="background-color: #e74c3c; color: white;">
-                    Hapus
-                </button>
-            </td>
-        </tr>
-        @empty
-        <tr>
-            <td colspan="8" class="text-center py-4 text-gray-500">
-                Data alat belum ada
-            </td>
-        </tr>
-        @endforelse
+        @foreach ($tools as $index => $tool)
+            <tr class="border-b">
+                <td class="px-4 py-2 text-center">{{ $index + 1 }}</td>
+
+                
+
+                <td class="px-4 py-2 text-center">{{ $tool->nama_alat }}</td>
+
+                <td class="px-4 py-2 text-center">{{ $tool->kategori }}</td>
+
+                <td class="px-4 py-2 text-center">
+                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
+                        {{ $tool->stok }} unit
+                    </span>
+                </td>
+
+                <td class="px-4 py-2 text-center">
+                    {{ $tool->alat_dipinjam ?? 0 }} unit
+                </td>
+
+                <td class="px-4 py-2 text-center">
+                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                        {{ $tool->stok_tersedia ?? $tool->stok }} unit
+                    </span>
+                </td>
+
+                <td class="px-4 py-2 text-center">
+                    @if(($tool->stok_tersedia ?? $tool->stok) > 0)
+                        <span class="bg-cyan-100 text-cyan-700 px-2 py-1 rounded">Tersedia</span>
+                    @else
+                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded">Habis</span>
+                    @endif
+                </td>
+
+                <td class="px-4 py-2 text-center">
+                    <a href="{{ route('tools.edit', $tool->id) }}"
+                    class="bg-blue-100 text-blue-700 px-3 py-1 rounded">
+                        Edit
+                    </a>
+
+                    <form action="{{ route('tools.destroy', $tool->id) }}"
+                        method="POST"
+                        style="display:inline-block;"
+                        onsubmit="return confirm('Yakin ingin menghapus alat ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded">
+                            Hapus
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        @endforeach
     </tbody>
 </table>
 </div>

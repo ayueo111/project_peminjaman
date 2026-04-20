@@ -20,6 +20,7 @@
         @forelse($loans as $index => $loan)
         <tr class="border-b text-center">
             <td class="px-4 py-2">{{ $index + 1 }}</td>
+            
             <td class="px-4 py-2">{{ $loan->nama_peminjam }}</td>
             <td class="px-4 py-2">{{ $loan->tool->nama_alat ?? '-' }}</td>
             <td class="px-4 py-2">{{ $loan->jumlah }}</td>
@@ -94,7 +95,7 @@
                 <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">⚠️ Jumlah Barang Rusak:</label>
                 <input type="number" name="jumlah_kembali_rusak" id="jumlahRusak" min="0" value="0" 
                        style="width: 100%; padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 0.375rem; color: #374151;">
-                <small style="color: #6B7280; display: block; margin-top: 0.25rem;">Denda: 50% × Harga Barang</small>
+                <small style="color: #6B7280; display: block; margin-top: 0.25rem;">Denda: sesuaikan dengan kerusakan barang</small>
             </div>
 
             <!-- Input Jumlah Hilang -->

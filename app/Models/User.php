@@ -29,4 +29,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function jadwal()
+    {
+    return $this->hasMany(JadwalPetugas::class);
+    }
 }

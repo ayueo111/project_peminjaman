@@ -10,7 +10,16 @@ class ToolController extends Controller
 {
     public function index()
     {
-        $tools = Tool::all();
+        $tools = Tool::with(['loans' => function ($query) {
+            $query->whereIn('status', ['disetujui', 'dipinjam']);
+        }])->get();
+
+        foreach ($tools as $tool) {
+            $jumlahDipinjam = $tool->loans->sum('jumlah');
+            $tool->alat_dipinjam = $jumlahDipinjam;
+            $tool->stok_tersedia = $tool->stok - $jumlahDipinjam;
+        }
+
         return view('tools.index', compact('tools'));
     }
 
@@ -23,20 +32,27 @@ class ToolController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode_alat' => 'required',
-            'nama_alat' => 'required',
-            'merk' => 'required',
-            'lokasi' => 'required',
-            'kondisi' => 'required',
-            'stok' => 'required|integer'
+            'nama_alat' => 'required|string|max:255',
+            // 'kategori' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'stok' => 'required|integer|min:0',
         ]);
 
-        $tool = Tool::create($request->all());
-        
-        // Catat aktivitas
-        ActivityHelper::log('CREATE_ALAT', "Tambah alat: {$tool->nama_alat}");
+        Tool::create([
+            'nama_alat' => $request->nama_alat,
+            // 'kategori' => $request->kategori,
+            'category_id' => $request->category_id,
+            'stok' => $request->stok,
 
-        return redirect()->route('tools.index')->with('success', 'Alat berhasil ditambahkan');
+            // default supaya tidak error kalau kolom ini masih ada di database
+            'kode_alat' => $request->nama_alat . '_' . time(),
+            'merk' => '-',
+            'lokasi' => '-',
+            'kondisi' => 'baik',
+            'jurusan' => '-',
+        ]);
+
+        return redirect()->route('tools.index')->with('success', 'Data alat berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -46,24 +62,23 @@ class ToolController extends Controller
         return view('tools.edit', compact('tool', 'categories'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Tool $tool)
     {
         $request->validate([
-            'kode_alat' => 'required',
-            'nama_alat' => 'required',
-            'merk' => 'required',
-            'lokasi' => 'required',
-            'kondisi' => 'required',
-            'stok' => 'required|integer'
+            'nama_alat' => 'required|string|max:255',
+            // 'kategori' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'stok' => 'required|integer|min:0',
         ]);
 
-        $tool = Tool::findOrFail($id);
-        $tool->update($request->all());
-        
-        // Catat aktivitas
-        ActivityHelper::log('UPDATE_ALAT', "Edit alat: {$tool->nama_alat}");
+        $tool->update([
+            'nama_alat' => $request->nama_alat,
+            // 'kategori' => $request->kategori,
+            'category_id' => $request->category_id,
+            'stok' => $request->stok,
+        ]);
 
-        return redirect()->route('tools.index')->with('success', 'Alat berhasil diperbarui');
+        return redirect()->route('tools.index')->with('success', 'Data alat berhasil diupdate.');
     }
 
     public function destroy($id)

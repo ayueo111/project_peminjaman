@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - admin peminjam</title>
+    <title>Admin peminjam</title>
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 
@@ -13,13 +13,8 @@
     <!-- SIDEBAR -->
     <div class="w-64 text-gray-800 flex flex-col shadow-lg border-r border-gray-200" style="background-color: #FFF7E6;">
 
-        <!-- LOGO -->
-        <div class="p-4 text-xl font-bold border-b border-gray-200 rounded-b-lg" style="background-color: #87b5ff; color: #374151;">
-            📚 Alat Peminjam
-        </div>
-
         <!-- USER -->
-        <div class="p-4 text-sm border-b border-gray-200" style="background-color: #DCEBFA;">
+        <div class="p-4 text-sm border-b border-gray-200" style="background-color: #9772b0;">
             <span style="color: #374151;">Login sebagai:</span><br>
             <b style="color: #374151;">{{ auth()->user()->name }}</b><br>
         </div>
@@ -41,7 +36,7 @@
 
             <a href="{{ route('tools.index') }}"
                class="block px-4 py-2 rounded transition font-semibold border-l-4"
-               style="{{ request()->is('tools*') ? 'background-color: #CDEDEA; color: #374151; border-color: #5B9FFF;' : 'color: #374151; border-color: transparent;' }}">
+               style="{{ request()->is('tools*') ? 'background-color: #CDEDEA; color: #374151; border-color: #5B9FFF;' : 'color: #2e004f; border-color: transparent;' }}">
                 📦 Data Alat
             </a>
 
@@ -90,7 +85,7 @@
         <!-- LOGOUT -->
         <form method="POST" action="{{ route('logout') }}" class="p-4 border-t border-gray-200">
             @csrf
-            <button class="w-full py-2 rounded font-semibold transition" style="background-color: #5B9FFF; color: #FFFFFF;">
+            <button class="w-full py-2 rounded font-semibold transition" style="background-color: #9772b0; color: #FFFFFF;">
                 🚪 Logout
             </button>
         </form>
